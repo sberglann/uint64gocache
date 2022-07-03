@@ -1,11 +1,10 @@
 package gocache
 
 import (
-	"testing"
-	"time"
-
 	"github.com/bouk/monkey"
 	"github.com/kpango/fastime"
+	"testing"
+	"time"
 )
 
 var defaultNowTimeForTest = time.Date(2018, 11, 2, 0, 0, 0, 0, time.Local)
@@ -63,12 +62,12 @@ func TestIsValid(t *testing.T) {
 
 func TestSet(t *testing.T) {
 	tests := []struct {
-		key      string
+		key      uint64
 		val      interface{}
 		expected bool
 	}{
 		{
-			key:      "key-1",
+			key:      uint64(1),
 			val:      "key-1_value",
 			expected: true,
 		},
@@ -86,25 +85,25 @@ func TestSet(t *testing.T) {
 
 func TestSetWithExpire(t *testing.T) {
 	tests := []struct {
-		key      string
+		key      uint64
 		val      interface{}
 		expire   time.Duration
 		expected bool
 	}{
 		{
-			key:      "key-1",
+			key:      uint64(1),
 			val:      "key-1_value",
 			expire:   time.Second * 100,
 			expected: true,
 		},
 		{
-			key:      "key-1",
+			key:      uint64(1),
 			val:      "key-1_value",
 			expire:   time.Second * 0,
 			expected: false,
 		},
 		{
-			key:      "key-1",
+			key:      uint64(1),
 			val:      "key-1_value",
 			expire:   time.Second * -100,
 			expected: false,
@@ -123,12 +122,12 @@ func TestSetWithExpire(t *testing.T) {
 
 func TestGet(t *testing.T) {
 	tests := []struct {
-		key      string
+		key      uint64
 		val      interface{}
 		expected interface{}
 	}{
 		{
-			key:      "key-1",
+			key:      uint64(1),
 			val:      "key-1_value",
 			expected: "key-1_value",
 		},
@@ -155,12 +154,12 @@ func TestGet(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 	tests := []struct {
-		key      string
+		key      uint64
 		val      interface{}
 		expected bool
 	}{
 		{
-			key:      "key-1",
+			key:      uint64(1),
 			val:      "key-1_value",
 			expected: true,
 		},
@@ -185,12 +184,12 @@ func TestDelete(t *testing.T) {
 
 func TestClear(t *testing.T) {
 	tests := []struct {
-		keys     []string
+		keys     []uint64
 		vals     []interface{}
 		expected []bool
 	}{
 		{
-			keys:     []string{"key-1", "key-2"},
+			keys:     []uint64{uint64(1), uint64(2)},
 			vals:     []interface{}{"key-1_value", "key-2_value"},
 			expected: []bool{false, false},
 		},

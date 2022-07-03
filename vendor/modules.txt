@@ -1,0 +1,28 @@
+# github.com/OneOfOne/xxhash v1.2.2
+## explicit
+# github.com/OrlovEvgeny/go-mcache v0.0.0-20181113222421-bed69649df7d
+## explicit
+# github.com/allegro/bigcache v1.1.0
+## explicit
+# github.com/bluele/gcache v0.0.0-20171010155617-472614239ac7
+## explicit
+# github.com/bouk/monkey v1.0.1
+## explicit
+github.com/bouk/monkey
+# github.com/cespare/xxhash v1.1.0
+## explicit
+# github.com/coocood/freecache v1.0.1
+## explicit
+# github.com/kpango/fastime v1.0.0
+## explicit
+github.com/kpango/fastime
+# github.com/kpango/gache v1.1.0
+## explicit
+# github.com/patrickmn/go-cache v2.1.0+incompatible
+## explicit
+# github.com/spaolacci/murmur3 v0.0.0-20180118202830-f09979ecbc72
+## explicit
+# github.com/vmihailenco/msgpack v4.0.1+incompatible
+## explicit
+# golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
+## explicit

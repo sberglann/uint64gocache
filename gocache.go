@@ -5,7 +5,6 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/cespare/xxhash"
 	"github.com/kpango/fastime"
 )
 
@@ -13,16 +12,16 @@ import (
 type Gocache interface {
 
 	// Get returns object with the given name from the cache.
-	Get(string) (interface{}, bool)
+	Get(uint64) (interface{}, bool)
 
 	// Set sets object in the cache.
-	Set(string, interface{}) bool
+	Set(uint64, interface{}) bool
 
 	// SetWithExpire sets object in cache with an expiration date.
-	SetWithExpire(string, interface{}, time.Duration) bool
+	SetWithExpire(uint64, interface{}, time.Duration) bool
 
 	// Delete deletes cache object of given name.
-	Delete(string)
+	Delete(uint64)
 
 	// Clear clears cache.
 	Clear()
@@ -89,11 +88,11 @@ func newDefaultShard() *shard {
 	}
 }
 
-func (g *gocache) getShard(key string) *shard {
-	return g.shards[xxhash.Sum64(*(*[]byte)(unsafe.Pointer(&key)))%g.ShardsCount]
+func (g *gocache) getShard(key uint64) *shard {
+	return g.shards[key%g.ShardsCount]
 }
 
-func (g *gocache) Get(key string) (interface{}, bool) {
+func (g *gocache) Get(key uint64) (interface{}, bool) {
 	val, ok := g.getShard(key).get(key)
 	if !ok {
 		return nil, false
@@ -102,17 +101,17 @@ func (g *gocache) Get(key string) (interface{}, bool) {
 	return val, ok
 }
 
-func (g *gocache) Set(key string, val interface{}) bool {
+func (g *gocache) Set(key uint64, val interface{}) bool {
 	shard := g.getShard(key)
 	return shard.set(key, val, g.Expire)
 }
 
-func (g *gocache) SetWithExpire(key string, val interface{}, expire time.Duration) bool {
+func (g *gocache) SetWithExpire(key uint64, val interface{}, expire time.Duration) bool {
 	shard := g.getShard(key)
 	return shard.set(key, val, *(*int64)(unsafe.Pointer(&expire)))
 }
 
-func (g *gocache) Delete(key string) {
+func (g *gocache) Delete(key uint64) {
 	g.getShard(key).delete(key)
 }
 
@@ -158,7 +157,7 @@ func (g *gocache) StopExpired() Gocache {
 	return g
 }
 
-func (s *shard) get(key string) (interface{}, bool) {
+func (s *shard) get(key uint64) (interface{}, bool) {
 	val, ok := s.Load(key)
 	if !ok {
 		return nil, false
@@ -174,7 +173,7 @@ func (s *shard) get(key string) (interface{}, bool) {
 	return nil, false
 }
 
-func (s *shard) set(key string, val interface{}, expire int64) bool {
+func (s *shard) set(key uint64, val interface{}, expire int64) bool {
 	if expire <= 0 {
 		return false
 	}
@@ -187,7 +186,7 @@ func (s *shard) set(key string, val interface{}, expire int64) bool {
 	return true
 }
 
-func (s *shard) delete(key string) {
+func (s *shard) delete(key uint64) {
 	s.Delete(key)
 }
 
